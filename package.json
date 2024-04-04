@@ -10,11 +10,19 @@
     "http-proxy-middleware": "^3.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+<<<<<<< HEAD
+=======
+    "react-query": "^3.39.3",
+>>>>>>> websockettest
     "react-router-dom": "^6.22.3",
     "react-scripts": "5.0.1",
     "web-vitals": "^2.1.4"
   },
+<<<<<<< HEAD
   "proxy" :  "http://localhost:8080",
+=======
+  "proxy": "http://localhost:8080",
+>>>>>>> websockettest
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
