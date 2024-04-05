@@ -3,25 +3,6 @@ import '../App.css'
 import Header from '../component/Header'
 import {useNavigate} from "react-router-dom";
 import axios from "axios";
-<<<<<<< HEAD
-const initState = {
-    id : '',
-    title : '',
-    price : ''
-}
-function Write() {
-    let navigate = useNavigate();
-    let [item, setItem] = useState(initState);
-    const inputChange = (e) => {
-        item[e.target.name] = e.target.value
-        setItem({...item})
-    }
-    const addItem = ()=> {
-        axios.post('http://localhost:8080/api/add', item)
-            .then((result)=>{
-            console.log(result.data)
-                navigate("/list")
-=======
 import { useQuery } from 'react-query';
 function Write() {
     let navigate = useNavigate();
@@ -53,7 +34,8 @@ function Write() {
         title : title,
         price : price,
         imageUrl : imgUrl,
-        writer: writer
+        writer: writer,
+        createdDate : new Date(),
     }
     let getURL = async function(e){
         const {
@@ -75,24 +57,27 @@ function Write() {
         }
     }
     //버튼 누르면 아이템 정보 서버로 보내는 함수
-    const addItem = ()=> {
-        axios.post('http://localhost:8080/api/add',item)
+    const addItem = (e)=> {
+        if (title == "" || title == null){
+            e.preventDefault();
+            alert("제목을 안적으셨습니다")
+        } else if (price == "" || price == null){
+            e.preventDefault();
+            alert("가격을 안적으셨습니다")
+        } else if( price < 0){
+            e.preventDefault();
+            alert("음수를 적으셨습니다")
+        } else {
+            axios.post('http://localhost:8080/api/add',item)
             .then((result)=>{
             console.log(result.data)
                 navigate("/list/1")
->>>>>>> websockettest
         }).catch((e)=>{
             console.log(`아이템 추가하면서 오류 생김 ${e}`)
         })
+        }
     }
-<<<<<<< HEAD
-    return (
-        <div>
-            <Header></Header>
-                <input onChange={inputChange} type="text" name="title"/>
-                <input onChange={inputChange} type="text" name="price"/>
-=======
-
+    console.log(item)
     return (
         <div>
             <Header></Header>
@@ -102,10 +87,9 @@ function Write() {
                 }
                 <input type="file" onChange={getURL}/>
                 <p>제목</p>
-                <input onChange={(e)=>{setTitle(e.target.value)}} type="text" name="title"/>
+                <input  onChange={(e)=>{setTitle(e.target.value)}} type="text" name="title"/>
                 <p>가격</p>
                 <input onChange={(e)=>{setPrice(e.target.value)}} type="text" name="price"/>
->>>>>>> websockettest
                 <button onClick={addItem}  type="submit">전송</button>
         </div>
     );

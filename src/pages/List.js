@@ -1,77 +1,60 @@
-<<<<<<< HEAD
-import React, {useEffect, useState} from 'react';
-import Header from '../component/Header'
-import {Link, useParams} from 'react-router-dom'
-import axios from "axios";
-function List() {
-    let [item, setItem] = useState();
-    let {id} = useParams();
-    useEffect(() => {
-            axios.get(`http://localhost:8080/api/list/${id}`)
-            .then((result)=>{
-                console.log(result)
-                setItem([...result.data])
-            }).catch((e)=>{
-                console.log(`아이템 리스트 가져오면서 에러남 ${e}`)
-        })
-    }, []);
-=======
 /* eslint-disable no-restricted-globals */
 import React, {useEffect, useState} from 'react';
 import Header from '../component/Header'
 import {Link, useParams, useNavigate} from 'react-router-dom'
 import { useQuery } from 'react-query';
 import axios from "axios";
-
+const initState = {
+    start : "",
+    end  : "",
+    last : "",
+    pageNumList : "",
+    items : [],
+}
 function List() {
-    let [item, setItem] = useState();
-    let [page, setPage] = useState();
+    let [list, setList] = useState(initState)
     let {id} = useParams();
-    let navigate = useNavigate();
     let itemList = useQuery(['게시물 가져오는 쿼리'],()=>{
         return axios.get(`http://localhost:8080/api/list/${id}`)
         .then((result)=>{
-            console.log(result.data)
-            setItem([...result.data.items.content])
-            setPage(result.data.items.size)
+            setList(result.data)
+            
         }).catch((e)=>{
             console.log(`아이템 리스트 가져오면서 에러남 ${e}`)
     })
     })
-    // console.log(item.sort())
->>>>>>> websockettest
+
     return (
         <div>
             <Header></Header>
             {
-                item && item.map((a,i)=>{
+                list.items.content && list.items.content.map((a,i)=>{
                     return (
                         <div key={i} className="card">
-<<<<<<< HEAD
-                            <img src="https://placehold.co/300" alt={"item"}/>
-=======
-                            {item[i].imageUrl ?  <img src={item[i].imageUrl} alt={"item"}/> : <img src="https://placehold.co/300" alt={"item"}/>}
->>>>>>> websockettest
+                            {list.items.content[i].imageUrl ?  <img src={list.items.content[i].imageUrl} alt={"item"}/> : <img src="https://placehold.co/300" alt={"item"}/>}
                             <div>
-                                <Link to={`/detail/${item[i].id}`}><h4>{item[i].title}</h4></Link>
-                                <p>{item[i].price}원</p>
+                                <Link to={`/detail/${list.items.content[i].id}`}><h4>{list.items.content[i].title}</h4></Link>
+                                <p>{list.items.content[i].price}원</p>
                             </div>
                         </div>
                     )
                 })
             }
-
-<<<<<<< HEAD
-=======
+             {/************** 페이지 네이션 버튼 *****************/}
             {
-                item && item.map((a,i)=>{
+                id <= 10 ? <></> : <button onClick={()=>{location.replace(`/list/1`)}}>{"<<"}</button>
+            }
+            {
+                list.pageNumList && list.pageNumList.map((a,i)=>{
                     return (
-                    <button key={i} onClick={()=>{location.replace(`/list/${i}`)}}>{i + 1}</button>
+                    <button key={i} onClick={()=>{location.replace(`/list/${a}`)}}>{a}</button>
                     )
                 })
             }
-
->>>>>>> websockettest
+            {
+              list.last < list.end ? <></>:  <button onClick={()=>{location.replace(`/list/${list.last}`)}}>{">>"}</button>  
+            }
+           
         </div>
     );
 }
